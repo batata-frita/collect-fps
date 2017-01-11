@@ -1,0 +1,34 @@
+{
+  "name": "collect-fps",
+  "version": "1.0.0",
+  "description": "Small module that uses requestAnimationFrame to collect what is the current FPS",
+  "main": "index.js",
+  "scripts": {
+    "build": "sagui build",
+    "dist": "sagui dist",
+    "prepublish": "npm prune && npm test && npm run dist",
+    "start": "sagui develop --port 3000",
+    "test": "npm run test:lint && npm run test:typecheck && npm run test:unit",
+    "test:lint": "sagui test:lint",
+    "test:typecheck": "sagui test:typecheck",
+    "test:unit": "sagui test:unit --coverage",
+    "test:unit:watch": "sagui test:unit --watch"
+  },
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "sagui": "beta"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pirelenito/collect-fps.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pirelenito/collect-fps/issues"
+  }
+}
