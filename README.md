@@ -14,7 +14,7 @@ npm install --save collect-fps
 
 And simply call it with a callback:
 
-```js
+```javascript
 import collectFPS from 'collect-fps'
 
 collectFPS((error, fps) => {
@@ -24,10 +24,12 @@ collectFPS((error, fps) => {
 
 By default, the library will collect 10 frames to calculate the current FPS, it is also possible to specify a custom number of frames by adding an extra argument:
 
-```js
+```javascript
 import collectFPS from 'collect-fps'
 
-collectFPS(100, (error, fps) => {
+const sampleSize = 100
+
+collectFPS(sampleSize, (error, fps) => {
   console.log(fps)
 })
 ```
