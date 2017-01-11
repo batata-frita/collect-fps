@@ -1,6 +1,7 @@
 # Collect FPS
 
 [![Build Status](https://travis-ci.org/pirelenito/collect-fps.svg)](https://travis-ci.org/pirelenito/collect-fps)
+[![npm version](https://badge.fury.io/js/collect-fps.svg)](https://badge.fury.io/js/collect-fps)
 
 Small module that uses `requestAnimationFrame` to collect what is the current FPS.
 
