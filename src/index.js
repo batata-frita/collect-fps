@@ -1,3 +1,5 @@
+import calculateFPS from './calculate-fps'
+
 export default function collectFPS (...args) {
   const customMaxFrames = typeof args[0] === 'number'
 
@@ -10,15 +12,22 @@ export default function collectFPS (...args) {
     return
   }
 
+  const visibilityEvents = []
+
+  const onVisibilityChange = () =>
+    visibilityEvents.push([!document.hidden, Date.now()])
+
+  document.addEventListener('visibilitychange', onVisibilityChange)
+
   const update = () => {
     frames.push(Date.now())
 
     if (frames.length < maxFrames) {
       window.requestAnimationFrame(update)
     } else {
-      const timePerFrame = (frames[frames.length - 1] - frames[0]) / frames.length
-      const fps = 1000 / timePerFrame
-      cb(null, fps)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+
+      cb(null, calculateFPS(frames, visibilityEvents))
     }
   }
 
