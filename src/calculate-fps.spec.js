@@ -33,9 +33,18 @@ describe('calculate-fps', () => {
       equal(getTotalHiddenTime(visibilityEvents), 110)
     })
 
-    it('should ignore unfinished hidden sequences', () => {
+    it('should ignore a visible event without a starting hidden event', () => {
       const visibilityEvents = [
         [BECAME_VISIBLE, 100],
+        [BECAME_HIDDEN, 1000],
+        [BECAME_VISIBLE, 1010]
+      ]
+
+      equal(getTotalHiddenTime(visibilityEvents), 10)
+    })
+
+    it('should ignore a hidden event without a closing visible event', () => {
+      const visibilityEvents = [
         [BECAME_HIDDEN, 1000],
         [BECAME_VISIBLE, 1010],
         [BECAME_HIDDEN, 1100]
