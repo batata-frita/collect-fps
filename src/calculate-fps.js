@@ -1,14 +1,17 @@
 // @flow
-const {max} = Math
-
 type Frame = number
 type VisibilityEvent = [boolean, number]
 
 export default (frames: Array<Frame>, visibilityEvents: Array<VisibilityEvent>) => {
+  const amountOfFrames = frames.length
+
+  if (amountOfFrames < 2) {
+    return 0
+  }
+
   const totalTime = frames[frames.length - 1] - frames[0]
   const visibleTime = totalTime - getTotalHiddenTime(visibilityEvents)
-  const amountOfFrames = max(frames.length - 1, 1)
-  const averageFrameDuration = visibleTime / amountOfFrames
+  const averageFrameDuration = visibleTime / (amountOfFrames - 1)
   const framesPerSecond = 1000 / averageFrameDuration
 
   return framesPerSecond
