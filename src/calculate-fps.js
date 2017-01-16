@@ -16,23 +16,31 @@ export default (frames: Array<Frame>, visibilityEvents: Array<VisibilityEvent>) 
 
 export const getTotalHiddenTime = (visibilityEvents: Array<VisibilityEvent>) =>
   visibilityEvents
-    .reduce((ranges, [visible, timestamp]) => {
-      // We only care about periods when the window was hidden, so
-      // if the first event is making the window visible, we ignore it
-      if (visible && ranges.length === 0) {
-        return ranges
-      }
+    .reduce(toHiddenRanges, [])
+    .filter(withEnd)
+    .map(toDuration)
+    .reduce(sumTotalTime, 0)
 
-      const last = ranges[ranges.length - 1]
-      const remaining = ranges.slice(0, -1)
+const toHiddenRanges = (ranges, [visible, timestamp]) => {
+  // We only care about periods when the window was hidden, so
+  // if the first event is making the window visible, we ignore it
+  if (visible && ranges.length === 0) {
+    return ranges
+  }
 
-      return !visible
-        // When it becomes hidden we start a new range
-        ? [...ranges, [timestamp]]
+  const last = ranges[ranges.length - 1]
+  const remaining = ranges.slice(0, -1)
 
-        // When it becomes visible we complete the previous range
-        : [...remaining, [last[0], timestamp]]
-    }, [])
-    .filter(([start, end]) => end != null)
-    .map(([start, end]) => end - start)
-    .reduce((totalHiddenTime, delta) => totalHiddenTime + delta, 0)
+  return !visible
+    // When it becomes hidden we start a new range
+    ? [...ranges, [timestamp]]
+
+    // When it becomes visible we complete the previous range
+    : [...remaining, [last[0], timestamp]]
+}
+
+const withEnd = ([start, end]) => end != null
+
+const toDuration = ([start, end]) => end - start
+
+const sumTotalTime = (totalHiddenTime, delta) => totalHiddenTime + delta
