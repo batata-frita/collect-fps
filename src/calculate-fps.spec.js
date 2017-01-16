@@ -2,6 +2,9 @@
 import calculateFPS, { getTotalHiddenTime } from './calculate-fps'
 import {equal} from 'assert'
 
+const BECAME_VISIBLE = true
+const BECAME_HIDDEN = false
+
 describe('calculate-fps', () => {
   describe('calculateFPS', () => {
     it('should calculate the fps', () => {
@@ -12,7 +15,7 @@ describe('calculate-fps', () => {
 
     it('should calculate the fps taking into account the hidden delta', () => {
       const frames = [200, 400, 600, 800, 1000]
-      const visibilityEvents = [[false, 0], [true, 300]]
+      const visibilityEvents = [[BECAME_HIDDEN, 0], [BECAME_VISIBLE, 300]]
 
       equal(calculateFPS(frames, visibilityEvents), 8)
     })
@@ -21,10 +24,10 @@ describe('calculate-fps', () => {
   describe('getTotalHiddenTime', () => {
     it('should calculate the amount of time that it spent hidden', () => {
       const visibilityEvents = [
-        [false, 1000],
-        [true, 1010],
-        [false, 1100],
-        [true, 1200]
+        [BECAME_HIDDEN, 1000],
+        [BECAME_VISIBLE, 1010],
+        [BECAME_HIDDEN, 1100],
+        [BECAME_VISIBLE, 1200]
       ]
 
       equal(getTotalHiddenTime(visibilityEvents), 110)
@@ -32,10 +35,10 @@ describe('calculate-fps', () => {
 
     it('should ignore unfinished hidden sequences', () => {
       const visibilityEvents = [
-        [true, 100],
-        [false, 1000],
-        [true, 1010],
-        [false, 1100]
+        [BECAME_VISIBLE, 100],
+        [BECAME_HIDDEN, 1000],
+        [BECAME_VISIBLE, 1010],
+        [BECAME_HIDDEN, 1100]
       ]
 
       equal(getTotalHiddenTime(visibilityEvents), 10)
