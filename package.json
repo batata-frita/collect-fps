@@ -1,6 +1,6 @@
 {
   "name": "collect-fps",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Small module that uses requestAnimationFrame to collect what is the current FPS",
   "main": "index.js",
   "scripts": {
