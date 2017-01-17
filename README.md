@@ -13,7 +13,7 @@ First install it:
 npm install --save collect-fps
 ```
 
-And simply call it with a callback:
+Calling it will initialize the collection and return a function. When invoked, that function will stop the collection and return the frame per seconds value (a float number).
 
 ```javascript
 import collectFPS from 'collect-fps'
