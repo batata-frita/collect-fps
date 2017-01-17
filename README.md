@@ -30,4 +30,4 @@ If `requestAnimationFrame` is not available in your runtime, it will throw an er
 
 ## License
 
-[MIT](License)
+[MIT](LICENSE)
