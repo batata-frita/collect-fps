@@ -13,24 +13,21 @@ First install it:
 npm install --save collect-fps
 ```
 
-And simply call it with a callback:
+Calling it will initialize the collection and return a function. When invoked, that function will stop the collection and return the frame per seconds value (a float number).
 
 ```javascript
 import collectFPS from 'collect-fps'
 
-collectFPS((error, fps) => {
+const endCollection = collectFPS()
+
+setTimeout(() => {
+  const fps = endCollection()
   console.log(fps)
-})
+}, 1000)
 ```
 
-By default, the library will collect 10 frames to calculate the current FPS, it is also possible to specify a custom number of frames by adding an extra argument:
+If `requestAnimationFrame` is not available in your runtime, it will throw an error when invoked
 
-```javascript
-import collectFPS from 'collect-fps'
+## License
 
-const sampleSize = 100
-
-collectFPS(sampleSize, (error, fps) => {
-  console.log(fps)
-})
-```
+[MIT](LICENSE)

@@ -1,23 +1,27 @@
 import collectFPS from '.'
 
 describe('collect-fps', function () {
-  it('should work with custom frames', function (done) {
-    collectFPS(100, (error, fps) => {
-      if (error) { return done.fail(error) }
+  it('should collect until it’s ended', function (done) {
+    const endFPSCollection = collectFPS()
+
+    setTimeout(() => {
+      const fps = endFPSCollection()
 
       expect(fps).toBeGreaterThan(0)
       expect(fps).toBeLessThan(120)
       done()
-    })
+    }, 100)
   })
 
-  it('should work with just a callback', function (done) {
-    collectFPS((error, fps) => {
-      if (error) { return done.fail(error) }
+  describe('when window.requestAnimationFrame is not available', () => {
+    it('should fail', () => {
+      const window = {}
 
-      expect(fps).toBeGreaterThan(0)
-      expect(fps).toBeLessThan(120)
-      done()
+      try {
+        collectFPS(window)
+      } catch (e) {
+        expect(e.message).toBe('requestAnimationFrame is not available')
+      }
     })
   })
 })

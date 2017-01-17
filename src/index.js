@@ -1,17 +1,11 @@
 import calculateFPS from './calculate-fps'
 
-export default function collectFPS (...args) {
-  const customMaxFrames = typeof args[0] === 'number'
-
-  const maxFrames = customMaxFrames ? args[0] : 10
-  const cb = customMaxFrames ? args[1] : args[0]
-  const frames = []
-
-  if (!window.requestAnimationFrame) {
-    cb(new Error('requestAnimationFrame is not available'))
-    return
+export default function collectFPS (theWindow = window) {
+  if (!theWindow.requestAnimationFrame) {
+    throw new Error('requestAnimationFrame is not available')
   }
 
+  // Collect visibility change events
   const visibilityEvents = []
 
   const onVisibilityChange = () =>
@@ -19,17 +13,24 @@ export default function collectFPS (...args) {
 
   document.addEventListener('visibilitychange', onVisibilityChange)
 
+  // Collect frames from requestAnimationFrame
+  let collecting = true
+  const frames = []
+
   const update = () => {
-    frames.push(Date.now())
-
-    if (frames.length < maxFrames) {
+    if (collecting) {
+      frames.push(Date.now())
       window.requestAnimationFrame(update)
-    } else {
-      document.removeEventListener('visibilitychange', onVisibilityChange)
-
-      cb(null, calculateFPS(frames, visibilityEvents))
     }
   }
 
   window.requestAnimationFrame(update)
+
+  // Return a function to end collection and retrieve FPS
+  return () => {
+    collecting = false
+    document.removeEventListener('visibilitychange', onVisibilityChange)
+
+    return calculateFPS(frames, visibilityEvents)
+  }
 }
